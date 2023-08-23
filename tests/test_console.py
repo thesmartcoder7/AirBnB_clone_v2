@@ -118,6 +118,56 @@ class TestHBNBCommand(unittest.TestCase):
             self.HBNB.onecmd("create asdfsfsd")
             self.assertEqual(
                 "** class doesn't exist **\n", f.getvalue())
+    
+    @unittest.skipIf(type(models.storage) == DBStorage, "Testing DBStorage")
+    def test_create(self):
+        """
+        Test case for 'create' command with various classes.
+        """
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.HBNB.onecmd("create User")
+            bm = f.getvalue().strip()
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.HBNB.onecmd("create BaseModel")
+            us = f.getvalue().strip()
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.HBNB.onecmd("create Place")
+            st = f.getvalue().strip()
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.HBNB.onecmd("create State")
+            pl = f.getvalue().strip()
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.HBNB.onecmd("create Review")
+            ct = f.getvalue().strip()
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.HBNB.onecmd("create City")
+            rv = f.getvalue().strip()
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.HBNB.onecmd("create Amenity")
+            am = f.getvalue().strip()
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.HBNB.onecmd("all User")
+            self.assertIn(bm, f.getvalue())
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.HBNB.onecmd("all BaseModel")
+            self.assertIn(us, f.getvalue())
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.HBNB.onecmd("all Place")
+            self.assertIn(st, f.getvalue())
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.HBNB.onecmd("all State")
+            self.assertIn(pl, f.getvalue())
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.HBNB.onecmd("all Review")
+            self.assertIn(ct, f.getvalue())
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.HBNB.onecmd("all City")
+            self.assertIn(rv, f.getvalue())
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.HBNB.onecmd("all Amenity")
+            self.assertIn(am, f.getvalue())
+
+
 
 
 
