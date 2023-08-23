@@ -74,3 +74,10 @@ class TestHBNBCommand(unittest.TestCase):
         self.assertIsNotNone(HBNBCommand.default.__doc__)
         self.assertIsNotNone(HBNBCommand.do_all.__doc__)
         self.assertIsNotNone(HBNBCommand.do_update.__doc__)
+
+    def test_emptyline(self):
+        """Test case for handling empty line input."""
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.HBNB.onecmd("\n")
+            self.assertEqual("", f.getvalue())
+
