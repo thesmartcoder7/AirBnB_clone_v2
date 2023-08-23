@@ -25,3 +25,37 @@ class TestHBNBCommand(unittest.TestCase):
     except IOError:
         pass
     cls.HBNB = HBNBCommand()
+
+    @classmethod
+    def tearDownClass(cls):
+        """Teardown for HBNBCommand testing.
+
+        Restores the original 'file.json'.
+        Deletes the test HBNBCommand instance.
+        Closes the session if using DBStorage.
+        """
+        try:
+            os.rename("tmp", "file.json")
+        except IOError:
+            pass
+        del cls.HBNB
+        if isinstance(models.storage, DBStorage):
+            models.storage._DBStorage__session.close()
+
+    def setUp(self):
+        """Set up for each test case.
+
+        Resets the dictionary of FileStorage objects.
+        """
+        FileStorage._FileStorage__objects = {}
+
+    def tearDown(self):
+        """Teardown for each test case.
+
+        Deletes any created 'file.json'.
+        """
+        try:
+            os.remove("file.json")
+        except IOError:
+            pass
+
