@@ -104,5 +104,21 @@ class TestHBNBCommand(unittest.TestCase):
         """
         with patch("sys.stdout", new=StringIO()) as f:
             self.assertTrue(self.HBNB.onecmd("EOF"))
+    
+    def test_create_errors(self):
+        """
+        Test cases for 'create' command errors.
+        """
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.HBNB.onecmd("create")
+            self.assertEqual(
+                "** class name missing **\n", f.getvalue())
+
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.HBNB.onecmd("create asdfsfsd")
+            self.assertEqual(
+                "** class doesn't exist **\n", f.getvalue())
+
+
 
 
