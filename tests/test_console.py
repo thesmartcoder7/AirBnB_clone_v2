@@ -284,3 +284,20 @@ class TestHBNBCommand(unittest.TestCase):
         with patch("sys.stdout", new=StringIO()) as f:
             self.HBNB.onecmd("update User 12345")
             self.assertEqual("** no instance found **\n", f.getvalue())
+    
+    @unittest.skipIf(type(models.storage) == DBStorage, "Testing DBStorage")
+    def test_z_all(self):
+        """
+        Test alternate form of 'all' command.
+        """
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.HBNB.onecmd("asdfsdfsd.all()")
+            self.assertEqual("** class doesn't exist **\n", f.getvalue())
+
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.HBNB.onecmd("State.all()")
+            self.assertEqual("[]\n", f.getvalue())
+
+
+
+    
