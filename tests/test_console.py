@@ -1,5 +1,8 @@
 #!/usr/bin/python3
-"""Creates test cases for the functionality in console.py."""
+"""
+Creates test cases for the functionality in console.py.
+"""
+
 import os
 from io import StringIO
 from console import HBNBCommand
@@ -11,7 +14,9 @@ from unittest.mock import patch
 
 
 class TestHBNBCommand(unittest.TestCase):
-   """Unit tests designed to assess the functionality of the HBNB command interpreter."""
+   """
+   Unit tests designed to assess the functionality of the HBNB command interpreter.
+   """
    @classmethod
    def setUpClass(cls):
     """Setup for HBNBCommand testing.
@@ -61,7 +66,9 @@ class TestHBNBCommand(unittest.TestCase):
     
 
     def test_docstrings(self):
-        """Ensure docstrings are present for methods."""
+        """
+        Ensure docstrings are present for methods.
+        """
         self.assertIsNotNone(HBNBCommand.__doc__)
         self.assertIsNotNone(HBNBCommand.emptyline.__doc__)
         self.assertIsNotNone(HBNBCommand.do_create.__doc__)
@@ -76,8 +83,17 @@ class TestHBNBCommand(unittest.TestCase):
         self.assertIsNotNone(HBNBCommand.do_update.__doc__)
 
     def test_emptyline(self):
-        """Test case for handling empty line input."""
+        """
+        Test case for handling empty line input.
+        """
         with patch("sys.stdout", new=StringIO()) as f:
             self.HBNB.onecmd("\n")
             self.assertEqual("", f.getvalue())
-
+    
+    def test_quit(self):
+        """
+        Test case for 'quit' command input.
+        """
+        with patch("sys.stdout", new=StringIO()) as f:
+            self.HBNB.onecmd("quit")
+            self.assertEqual("", f.getvalue())
