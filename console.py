@@ -1,7 +1,8 @@
 #!/usr/bin/python3
 """ Console Module """
-import cmd
 import sys
+import re
+import cmd
 import models
 from models.base_model import BaseModel
 from models.__init__ import storage
@@ -11,6 +12,16 @@ from models.state import State
 from models.city import City
 from models.amenity import Amenity
 from models.review import Review
+
+
+def type_convert(value):
+    if re.match(r'^".*"$', value):
+        return value.replace("_", " ").replace("\"", "")
+    elif "." in value:
+        return float(value)
+    elif re.match(r"\d+", value):
+        return int(value)
+    return value
 
 
 classes = {
@@ -124,24 +135,35 @@ class HBNBCommand(cmd.Cmd):
         """ Overrides the emptyline method of CMD """
         pass
 
-    def do_create(self, arg):
-        """
-        Usage: create <class> <key 1>=<value 2> <key 2>=<value 2> ...
-        Create a new class instance with given keys/values and print its id.
-        """
-        args = arg.split()
+    def do_create(self, args):
+        '''
+        Create a new instance of class BaseModel and save it
+        to the JSON file.
+        '''
         if len(args) == 0:
             print("** class name missing **")
-            return False
-        if args[0] in classes:
-            new_dict = self._key_value_parser(args[1:])
-            instance = classes[args[0]](**new_dict)
-            models.storage.new(instance)
-            models.storage.save()
-        else:
+            return
+
+        class_name, *attr_args = args.split()
+
+        if class_name not in HBNBCommand.classes:
             print("** class doesn't exist **")
-            return False
-        print(instance.id)
+            return
+
+        new_instance = HBNBCommand.classes[class_name]()
+
+        for arg in attr_args:
+            key, value = arg.split('=')
+
+            try:
+                setattr(new_instance, key, type_convert(value))
+            except AttributeError:
+                print(
+                    f"Attribute '{key}' doesn't exist in class '{class_name}'"
+                    )
+
+        new_instance.save()
+        print(new_instance.id)
 
     def help_create(self):
         """ Help information for the create method """
