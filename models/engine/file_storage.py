@@ -15,33 +15,24 @@ class FileStorage:
     deserializes JSON file to instances
     Attributes:
         __file_path: path to the JSON file
-        __objects: objects will be stored with key clsname.objectID
+        __objects: objects will be stored
     """
     __file_path = "file.json"
     __objects = {}
-    __clsdict = {
-        "User": User,
-        "State": State,
-        "City": City,
-        "Amenity": Amenity,
-        "Place": Place,
-        "Review": Review
-    }
+
+    def delete(self, obj=None):
+        """deletes obj from __objects if it's inside"""
+        if obj:
+            k = "{}.{}".format(type(obj).__name__, obj.id)
+            del self.__objects[k]
 
     def all(self, cls=None):
-        '''
-        Return the dictionary
-        '''
-        if cls is None:
-            return self.__objects
-        else:
-            dict = {}
-            for k, v in self.__objects.items():
-                name = k.split('.')
-                if name[0] in str(cls):
-                    dict[k] = v
-            return dict
-    
+        """returns a dictionary
+        Return:
+            returns a dictionary of __object
+        """
+        return FileStorage.__objects
+
     def new(self, obj):
         """sets __object to given obj
         Args:
@@ -70,23 +61,3 @@ class FileStorage:
                     self.__objects[key] = value
         except FileNotFoundError:
             pass
-
-    def delete(self, obj=None):
-        """delete an object from __objects if the given object exists
-        Args:
-            obj: given object
-        Exceptions:
-            KeyError: when object doesn't exist
-        """
-        if obj:
-            key = "{}.{}".format(type(obj).__name__, obj.id)
-            self.__objects.pop(key, None)
-            # try:
-            #     del self.__objects[key]
-            # except KeyError:
-            #     pass
-
-    def close(self):
-        """deserializing the JSON file to objects
-        """
-        self.reload()
