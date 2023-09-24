@@ -17,11 +17,12 @@ def states():
 @app.route("/states/<id>", strict_slashes=False)
 def states_id(id):
     """Get all states in database"""
-    states = storage.all("State").values()
-    for state in states:
-        if state.id == id:
-            return render_template("9-states.html", state=state)
-    return render_template("9-states.html")
+    state_list = storage.all('State')
+    state = {}
+    for key, value in state_list.items():
+        if value.id == id:
+            state = state_list[key]
+    return render_template('9-states.html', id=id, state=state)
 
 
 @app.teardown_appcontext
