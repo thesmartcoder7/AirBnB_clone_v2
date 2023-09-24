@@ -7,22 +7,14 @@ from flask import Flask, render_template
 app = Flask(__name__)
 
 
-@app.route("/states", strict_slashes=False)
-def states():
-    """Get all states in database"""
+@app.route('/states', strict_slashes=False)
+@app.route('/states/<state_id>', strict_slashes=False)
+def states(state_id=None):
+    """display the states and cities listed in alphabetical order"""
     states = storage.all("State")
-    return render_template("9-states.html", state=states)
-
-
-@app.route("/states/<id>", strict_slashes=False)
-def states_id(id):
-    """Get all states in database"""
-    state_list = storage.all('State')
-    state = {}
-    for key, value in state_list.items():
-        if value.id == id:
-            state = state_list[key]
-    return render_template('9-states.html', id=id, state=state)
+    if state_id is not None:
+        state_id = 'State.' + state_id
+    return render_template('9-states.html', states=states, state_id=state_id)
 
 
 @app.teardown_appcontext
